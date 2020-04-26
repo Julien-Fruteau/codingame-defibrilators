@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "*.template": "properties",
+        "*.txt": "plaintext",
+        "*.?sh": "shellscript",
+        "*.pom": "xml",
+        "istream": "cpp",
+        "string": "cpp",
+        "string_view": "cpp"
+    },
+    "C_Cpp.intelliSenseEngineFallback": "Enabled"
+}
