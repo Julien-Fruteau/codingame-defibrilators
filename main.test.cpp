@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <math.h>
 
 double strToDbl(std::string &str, std::string const sub = ".")
 {
@@ -28,7 +29,15 @@ void split(const std::string &str, T &cont, char delim = ';')
 }
 
 
-int main()
+double getDistance(double const &lonA, double const &latA, double const &lonB, double const &latB)
+{
+    double x = (lonB - lonA) * cos((latA + latB)/2);
+    double y = latB - latA;
+    return sqrt(pow(x, 2) + pow(y, 2)) * 6371;
+}
+
+
+    int main()
 {
     std::string LON = "3,879483";
     double dLON = strToDbl(LON);
@@ -38,7 +47,7 @@ int main()
     // cin.ignore();
     // cerr << LON << endl;
 
-    std::string LAT = "3,879483";
+    std::string LAT = "43,608177";
     double dLAT = strToDbl(LAT);
     // string LAT;
     // cin >> LAT;
@@ -49,18 +58,27 @@ int main()
     // cin >> N;
     // cin.ignore();
 
-    // std::vector<std::string> defibs {
-    //     "1;Maison de la Prevention Sante;6 rue Maguelone 340000 Montpellier;;3,87952263361082;43,6071285339217",
-    //     "2;Hotel de Ville;1 place Georges Freche 34267 Montpellier;;3,89652239197876;43,5987299452849",
-    //     "3;Zoo de Lunaret;50 avenue Agropolis 34090 Mtp;;3,87388031141133;43,6395872778854"
-    // };
+    std::vector<std::string> defibs; 
+    defibs.push_back("1;Maison de la Prevention Sante;6 rue Maguelone 340000 Montpellier;;3,87952263361082;43,6071285339217");
+    defibs.push_back("2;Hotel de Ville;1 place Georges Freche 34267 Montpellier;;3,89652239197876;43,5987299452849");
+    defibs.push_back("3;Zoo de Lunaret;50 avenue Agropolis 34090 Mtp;;3,87388031141133;43,6395872778854");
 
-    std::string defib = "1;Maison de la Prevention Sante;6 rue Maguelone 340000 Montpellier;;3,87952263361082;43,6071285339217";
- 
-    std::vector<std::string> strSplit;
-    split(defib, strSplit);
+    std::string closestDefib;
+    std::vector<double> distances;
+    std::vector<std::string> defibsLocation;
 
+    // std::string defib = "1;Maison de la Prevention Sante;6 rue Maguelone 340000 Montpellier;;3,87952263361082;43,6071285339217";
 
+    for (size_t i = 0; i < defibs.size(); i++)
+    {
+        std::vector<std::string> strSplit;
+        split(defibs[i], strSplit);
+        defibsLocation.push_back(strSplit[1]);
+        distances.push_back(getDistance(dLON, dLAT, strToDbl(strSplit[4]), strToDbl(strSplit[5])));
+    }
+    
+    size_t minDistanceIndex = std::min_element(distances.begin(), distances.end()) - distances.begin();
+    
     // for (int i = 0; i < N; i++)
     // {
     //     string DEFIB;
@@ -71,6 +89,6 @@ int main()
     // // Write an answer using cout. DON'T FORGET THE "<< endl"
     // // To debug: cerr << "Debug messages..." << endl;
 
-    // cout << "answer" << endl;
+    std::cout << defibsLocation[minDistanceIndex] << std::endl;
     return 0;
 }
